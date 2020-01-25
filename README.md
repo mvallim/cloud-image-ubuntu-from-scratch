@@ -565,7 +565,7 @@ sudo umount $HOME/cloud-image-ubuntu-from-scratch/chroot/dev
 sudo umount $HOME/cloud-image-ubuntu-from-scratch/chroot/run
 ```
 
-## Umount loop partition
+## Umount loop partitions
 
 ```shell
 sudo umount $HOME/cloud-image-ubuntu-from-scratch/chroot/boot
