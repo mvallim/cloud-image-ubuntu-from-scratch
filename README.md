@@ -184,7 +184,7 @@ mkdir $HOME/cloud-image-ubuntu-from-scratch
      --arch=amd64 \
      --variant=minbase \
      --components "main,universe" \
-     --include "ca-certificates,cron,iptables,isc-dhcp-client,libnss-myhostname,ntp,ntpdate,rsyslog,ssh,sudo,dialog,whiptail,man-db,curl" \
+     --include "ca-certificates,cron,iptables,isc-dhcp-client,libnss-myhostname,ntp,ntpdate,rsyslog,ssh,sudo,dialog,whiptail,man-db,curl,dosfstools,e2fsck-static" \
      bionic \
      $HOME/cloud-image-ubuntu-from-scratch/chroot \
      http://us.archive.ubuntu.com/ubuntu/
