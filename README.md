@@ -348,12 +348,101 @@ mkdir $HOME/cloud-image-ubuntu-from-scratch
     EOF
     ```
 
-11. **Install VirtualBox Guest Additions (optional)**
+11. **Reconfigure packages**
+
+    1. Generate locales
+
+       ```shell
+       dpkg-reconfigure locales
+       ```
+
+       1. *Select locales*
+          <p align="center">
+            <img src="images/locales-select.png">
+          </p>
+
+       2. *Select default locale*
+          <p align="center">
+            <img src="images/locales-default.png">
+          </p>   
+
+    2. Reconfigure resolvconf
+
+       ```shell
+       dpkg-reconfigure resolvconf
+       ```
+
+       1. *Confirm changes*
+          <p align="center">
+            <img src="images/resolvconf-confirm-01.png">
+          </p>
+
+          <p align="center">
+            <img src="images/resolvconf-confirm-02.png">
+          </p>
+
+          <p align="center">
+            <img src="images/resolvconf-confirm-03.png">
+          </p>
+
+    3. Configure network-manager
+
+       ```shell
+       cat <<EOF > /etc/NetworkManager/NetworkManager.conf
+       [main]
+       rc-manager=resolvconf
+       plugins=ifupdown,keyfile
+       dns=default
+
+       [ifupdown]
+       managed=false
+       EOF
+       ```
+
+    4. Reconfigure network-manager
+
+       ```shell
+       dpkg-reconfigure network-manager
+       ```
+
+12. **Install `grub`**
+
+    1. Install
+
+       ```shell
+       grub-install /dev/loop0
+       ```
+
+       Output
+
+       ```text
+       Installing for i386-pc platform.
+       Installation finished. No error reported.
+       ```
+
+    2. Update grub configuration
+
+       ```shell
+       update-grub
+       ```
+
+       Output
+
+       ```text
+       Sourcing file `/etc/default/grub'
+       Generating grub configuration file ...
+       Found linux image: /boot/vmlinuz-4.15.0-74-generic
+       Found initrd image: /boot/initrd.img-4.15.0-74-generic
+       Adding boot menu entry for EFI firmware configuration
+       done
+       ```
+
+13. **If you use this image on VirtualBox, please install VirtualBox Guest Additions (optional)**
 
     1. Download VirtualBox Guest Additions
 
        ```shell
-       curl -s https://download.virtualbox.org/virtualbox/6.0.6/VBoxGuestAdditions_6.0.6.iso -o VBoxGuestAdditions_6.0.6.iso
+       curl --progress-bar https://download.virtualbox.org/virtualbox/6.0.6/VBoxGuestAdditions_6.0.6.iso -o VBoxGuestAdditions_6.0.6.iso
        ```
 
     2. Mount ISO
@@ -436,96 +525,35 @@ mkdir $HOME/cloud-image-ubuntu-from-scratch
        sed -i -e 's/ systemd-timesyncd.service//g' /lib/systemd/system/vboxadd-service.service
        ```
 
-12. **Reconfigure packages**
+14. **If you use this image on Azure, please install Azure agent (optional)**
 
-    1. Generate locales
-
-       ```shell
-       dpkg-reconfigure locales
-       ```
-
-       1. *Select locales*
-          <p align="center">
-            <img src="images/locales-select.png">
-          </p>
-
-       2. *Select default locale*
-          <p align="center">
-            <img src="images/locales-default.png">
-          </p>   
-
-    2. Reconfigure resolvconf
+    1. Install the latest package version
 
        ```shell
-       dpkg-reconfigure resolvconf
+       apt-get install walinuxagent
        ```
 
-       1. *Confirm changes*
-          <p align="center">
-            <img src="images/resolvconf-confirm-01.png">
-          </p>
+    2. Ensure auto update is enabled
 
-          <p align="center">
-            <img src="images/resolvconf-confirm-02.png">
-          </p>
-
-          <p align="center">
-            <img src="images/resolvconf-confirm-03.png">
-          </p>
-
-    3. Configure network-manager
+       First, check to see if it is enabled:
 
        ```shell
-       cat <<EOF > /etc/NetworkManager/NetworkManager.conf
-       [main]
-       rc-manager=resolvconf
-       plugins=ifupdown,keyfile
-       dns=default
-
-       [ifupdown]
-       managed=false
-       EOF
+       cat /etc/waagent.conf | grep AutoUpdate.Enabled
        ```
 
-    4. Reconfigure network-manager
-
-       ```shell
-       dpkg-reconfigure network-manager
-       ```
-
-13. **Install `grub`**
-
-    1. Install
-
-       ```shell
-       grub-install /dev/loop0
-       ```
-
-       Output
+       Find 'AutoUpdate.Enabled'. If you see this output, it is enabled:
 
        ```text
-       Installing for i386-pc platform.
-       Installation finished. No error reported.
+       # AutoUpdate.Enabled=y
        ```
 
-    2. Update grub configuration
+    3. To enable run:
 
        ```shell
-       update-grub
+       sudo sed -i 's/# AutoUpdate.Enabled=n/AutoUpdate.Enabled=y/g' /etc/waagent.conf
        ```
 
-       Output
-
-       ```text
-       Sourcing file `/etc/default/grub'
-       Generating grub configuration file ...
-       Found linux image: /boot/vmlinuz-4.15.0-74-generic
-       Found initrd image: /boot/initrd.img-4.15.0-74-generic
-       Adding boot menu entry for EFI firmware configuration
-       done
-       ```
-
-14. **Cleanup the chroot environment**
+15. **Cleanup the chroot environment**
 
     1. If you installed software, be sure to run
 
