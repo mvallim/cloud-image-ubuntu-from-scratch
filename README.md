@@ -8,8 +8,10 @@ Install applications we need to build the environment.
 
 ```shell
 sudo apt-get install \
-    binutils \
-    debootstrap
+   debootstrap \
+   qemu-utils \
+   qemu-system \
+   genisoimage
 ```
 
 ```shell
@@ -581,4 +583,93 @@ sudo losetup -D
 
 ## Test image
 
-(In progress)
+1. **Convert `raw` image to `qcow2`**
+
+   ```shell
+   qemu-img convert -f raw cloud-ubuntu-image.raw -O qcow2 ubuntu-image.qcow2
+   ```
+
+2. **Create a simple `user-data` intilizer `cloud-init`**
+
+   Generate hash passwd (sha-512)
+
+   ```shell
+   openssl passwd -6 ubuntu
+   ```
+
+   Output
+
+   ```text
+   $6$vcSilJc5EkAaj/sE$RfHgGqzKQ/iVHvFObi8acrKFeLUcNAHH7YPT7hP7euIB5m8p.rbxxntrgyFalFG6eKlKE/OLCq6L2Fu/NWZi4/
+   ```
+
+   Use this value on user-data yml file
+
+   ```shell
+   cat <<EOF > user-data
+   #cloud-config
+
+   users:
+   - name: ubuntu
+     passwd: \$6\$vcSilJc5EkAaj/sE\$RfHgGqzKQ/iVHvFObi8acrKFeLUcNAHH7YPT7hP7euIB5m8p.rbxxntrgyFalFG6eKlKE/OLCq6L2Fu/NWZi4/
+     lock_passwd: false
+     sudo: ['ALL=(ALL) NOPASSWD:ALL']
+     shell: /bin/bash
+
+   power_state:
+     mode: reboot
+     timeout: 30
+     condition: true
+   EOF
+   ```
+
+3. **Create a simple `meta-data` intilizer `cloud-init`**
+
+   ```shell
+   cat <<EOF > meta-data
+   local-hostname: instance-test
+   EOF
+   ```
+
+4. **Create a disk to attach with Cloud-Init configuration**
+
+   ```shell
+   genisoimage -output instance-test-cidata.iso -input-charset utf-8 -volid cidata -joliet -rock user-data meta-data
+   ```
+
+   Output
+
+   ```text
+   Total translation table size: 0
+   Total rockridge attributes bytes: 331
+   Total directory bytes: 0
+   Path table size(bytes): 10
+   Max brk space used 0
+   183 extents written (0 MB)
+   ```
+
+5. **Launch virtual machine**
+
+   ```shell
+   qemu-system-x86_64 -m 512 -hda ubuntu-image.qcow2 -cdrom instance-test-cidata.iso -enable-kvm -net nic -net user
+   ```
+
+6. **Login on image**
+
+## Contributing
+
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
+
+## Versioning
+
+We use [GitHub](https://github.com/mvallim/cloud-image-ubuntu-from-scratch) for versioning. For the versions available, see the [tags on this repository](https://github.com/mvallim/cloud-image-ubuntu-from-scratch/tags).
+
+## Authors
+
+* **Marcos Vallim** - *Initial work, Development, Test, Documentation* - [mvallim](https://github.com/mvallim)
+
+See also the list of [contributors](CONTRIBUTORS.txt) who participated in this project.
+
+## License
+
+This project is licensed under the Apache License - see the [LICENSE](LICENSE) file for details
