@@ -634,7 +634,13 @@ sudo losetup -D
 4. **Create a disk to attach with Cloud-Init configuration**
 
    ```shell
-   genisoimage -output instance-test-cidata.iso -input-charset utf-8 -volid cidata -joliet -rock user-data meta-data
+   genisoimage \
+      -output instance-test-cidata.iso \
+      -input-charset utf-8 \
+      -volid cidata \
+      -joliet \
+      -rock \
+      user-data meta-data
    ```
 
    Output
@@ -651,7 +657,13 @@ sudo losetup -D
 5. **Launch virtual machine**
 
    ```shell
-   qemu-system-x86_64 -m 512 -hda ubuntu-image.qcow2 -cdrom instance-test-cidata.iso -enable-kvm -net nic -net user
+   qemu-system-x86_64 \
+      -m 512 \
+      -hda ubuntu-image.qcow2 \
+      -cdrom instance-test-cidata.iso \
+      -enable-kvm \
+      -net nic \
+      -net user
    ```
 
 6. **Login on image**
