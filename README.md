@@ -591,7 +591,7 @@ sudo losetup -D
 
 2. **Create a simple `user-data` intilizer `cloud-init`**
 
-   Generate hash passwd (sha-512)
+   Generate hash passwd 'ubuntu'
 
    ```shell
    openssl passwd -6 ubuntu
@@ -667,6 +667,12 @@ sudo losetup -D
    ```
 
 6. **Login on image**
+
+   Use user `ubuntu` and password `ubuntu`, previously configured in step **2**
+
+   <p align="center">
+      <img src="images/qemu.png">
+   </p>
 
 ## Contributing
 
