@@ -437,21 +437,23 @@ mkdir $HOME/cloud-image-ubuntu-from-scratch
        done
        ```
 
-13. **If you use this image on VirtualBox, please install VirtualBox Guest Additions (optional)**
+## VirtualBox
 
-    1. Download VirtualBox Guest Additions
+If you use this image on VirtualBox, install **VirtualBox Guest Additions**
+
+   1. Download VirtualBox Guest Additions
 
        ```shell
        curl --progress-bar https://download.virtualbox.org/virtualbox/6.0.6/VBoxGuestAdditions_6.0.6.iso -o VBoxGuestAdditions_6.0.6.iso
        ```
 
-    2. Mount ISO
+   2. Mount ISO
 
        ```shell
        mount -o loop VBoxGuestAdditions_6.0.6.iso /mnt
        ```
 
-    3. Install
+   3. Install
 
        ```shell
        /mnt/VBoxLinuxAdditions.run
@@ -482,7 +484,7 @@ mkdir $HOME/cloud-image-ubuntu-from-scratch
        Running in chroot, ignoring request: daemon-reload
        ```
 
-    4. Generate modules inside `chroot` environment
+   4. Generate modules inside `chroot` environment
 
        ```shell
        ls -al /lib/modules
@@ -511,7 +513,7 @@ mkdir $HOME/cloud-image-ubuntu-from-scratch
        Warning: /sbin/fsck.vfat doesn't exist, can't install to initramfs, ignoring.
        ```
 
-    5. Umount and remove ISO
+   5. Umount and remove ISO
 
        ```shell
        umount /mnt
@@ -519,21 +521,23 @@ mkdir $HOME/cloud-image-ubuntu-from-scratch
        rm -rf VBoxGuestAdditions_6.0.6.iso
        ```
 
-    6. Fix `vboxadd-service`
+   6. Fix `vboxadd-service`
 
        ```shell
        sed -i -e 's/ systemd-timesyncd.service//g' /lib/systemd/system/vboxadd-service.service
        ```
 
-14. **If you use this image on Azure, please install Azure agent (optional)**
+## Azure
 
-    1. Install the latest package version
+If you use this image on Azure, install **Azure agent**
+
+   1. Install the latest package version
 
        ```shell
        apt-get install walinuxagent
        ```
 
-    2. Ensure auto update is enabled
+   2. Ensure auto update is enabled
 
        First, check to see if it is enabled:
 
@@ -547,21 +551,21 @@ mkdir $HOME/cloud-image-ubuntu-from-scratch
        # AutoUpdate.Enabled=y
        ```
 
-    3. To enable run:
+   3. To enable run:
 
        ```shell
        sudo sed -i 's/# AutoUpdate.Enabled=n/AutoUpdate.Enabled=y/g' /etc/waagent.conf
        ```
 
-15. **Cleanup the chroot environment**
+## Cleanup the chroot environment
 
-    1. If you installed software, be sure to run
+   1. If you installed software, be sure to run
 
        ```shell
        truncate -s 0 /etc/machine-id
        ```
 
-    2. Remove the diversion
+   2. Remove the diversion
 
        ```shell
        rm /sbin/initctl
@@ -569,7 +573,7 @@ mkdir $HOME/cloud-image-ubuntu-from-scratch
        dpkg-divert --rename --remove /sbin/initctl
        ```
 
-    3. Clean up
+   3. Clean up
 
        ```shell
        apt-get clean
