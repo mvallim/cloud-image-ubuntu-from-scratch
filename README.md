@@ -578,3 +578,7 @@ sudo umount $HOME/cloud-image-ubuntu-from-scratch/chroot
 ```shell
 sudo losetup -D
 ```
+
+## Test image
+
+(In progress)
