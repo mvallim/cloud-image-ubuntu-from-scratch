@@ -1,6 +1,6 @@
 # How to create a Cloud image Ubuntu from scratch
 
-This procedure shows how to create a cloud image Ubuntu from scratch to run on Cloud environments (EC2,GCE,Azure,QEMU and VirtualBox).
+This procedure shows how to create a cloud image Ubuntu from scratch to run on Cloud environments (EC2, GCE, Azure, QEMU and VirtualBox).
 
 ## Prerequisites (GNU/Linux Debian/Ubuntu)
 
@@ -26,10 +26,10 @@ mkdir $HOME/cloud-image-ubuntu-from-scratch
    cd $HOME/cloud-image-ubuntu-from-scratch
    ```
 
-2. Create empty virtual hard drive file (50Gb)
+2. Create empty virtual hard drive file (`30Gb`)
 
    ```shell
-   dd if=/dev/zero of=cloud-ubuntu-image.raw bs=1 count=0 seek=53687091200 status=progress
+   dd if=/dev/zero of=cloud-ubuntu-image.raw bs=1 count=0 seek=32212254720 status=progress
    ```
 
 3. Create partitions on file
@@ -299,7 +299,7 @@ mkdir $HOME/cloud-image-ubuntu-from-scratch
 
    > **dpkg-divert** is the utility used to set up and update the list of diversions.
 
-9. **Install packages needed for Live System**
+9. **Install packages needed for system**
 
    ```shell
    apt-get install -y \
@@ -499,7 +499,7 @@ If you use this image on VirtualBox, install **VirtualBox Guest Additions**
        drwxr-xr-x  5 root root 4096 Jan 25 22:29 4.15.0-74-generic
        ```
 
-       Use the same name listed before `4.15.0-74-generic`
+       Use the same name listed before 4.15.0-74-generic
 
        ```shell
        rcvboxadd quicksetup 4.15.0-74-generic
