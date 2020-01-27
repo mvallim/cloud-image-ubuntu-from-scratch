@@ -613,6 +613,14 @@ sudo umount $HOME/cloud-image-ubuntu-from-scratch/chroot
 sudo losetup -D
 ```
 
+## Conclusion
+
+At the end the image produced is in `cloud-ubuntu-image.raw`.
+
+Now you can use this raw image and import it into your favorite cloud.
+
+Each cloud has a process for importing which we will not deal with here.
+
 ## Test image
 
 1. **Convert `raw` image to `qcow2`**
