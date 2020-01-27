@@ -26,10 +26,10 @@ mkdir $HOME/cloud-image-ubuntu-from-scratch
    cd $HOME/cloud-image-ubuntu-from-scratch
    ```
 
-2. Create empty virtual hard drive file (50Gb)
+2. Create empty virtual hard drive file (`30Gb`)
 
    ```shell
-   dd if=/dev/zero of=cloud-ubuntu-image.raw bs=1 count=0 seek=53687091200 status=progress
+   dd if=/dev/zero of=cloud-ubuntu-image.raw bs=1 count=0 seek=32212254720 status=progress
    ```
 
 3. Create partitions on file
