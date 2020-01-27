@@ -439,7 +439,7 @@ mkdir $HOME/cloud-image-ubuntu-from-scratch
 
 ## VirtualBox
 
-If you are going to use this image in **VirtualBox**, install **VirtualBox Guest Additions**
+If you plan to use this image in **VirtualBox**, install **VirtualBox Guest Additions**
 
    1. Download VirtualBox Guest Additions
 
@@ -529,7 +529,7 @@ If you are going to use this image in **VirtualBox**, install **VirtualBox Guest
 
 ## Azure
 
-If you are going to use this image in **Azure**, install the **Azure agent**
+If you plan to use this image in **Azure**, install the **Azure agent**
 
    1. Install the latest package version
 
