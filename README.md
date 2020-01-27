@@ -299,7 +299,7 @@ mkdir $HOME/cloud-image-ubuntu-from-scratch
 
    > **dpkg-divert** is the utility used to set up and update the list of diversions.
 
-9. **Install packages needed for Live System**
+9. **Install packages needed for system**
 
    ```shell
    apt-get install -y \
