@@ -487,22 +487,7 @@ If you use this image on VirtualBox, install **VirtualBox Guest Additions**
    4. Generate modules inside `chroot` environment
 
        ```shell
-       ls -al /lib/modules
-       ```
-
-       Output
-
-       ```text
-       total 12
-       drwxr-xr-x  3 root root 4096 Jan 25 22:29 .
-       drwxr-xr-x 14 root root 4096 Jan 25 22:29 ..
-       drwxr-xr-x  5 root root 4096 Jan 25 22:29 4.15.0-74-generic
-       ```
-
-       Use the same name listed before `4.15.0-74-generic`
-
-       ```shell
-       rcvboxadd quicksetup 4.15.0-74-generic
+       rcvboxadd quicksetup $(uname -r) 
        ```
 
        Output like this
