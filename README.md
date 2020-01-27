@@ -82,16 +82,16 @@ mkdir $HOME/cloud-image-ubuntu-from-scratch
    Output
 
    ```text
-   Disk /dev/loop0: 50 GiB, 53687091200 bytes, 104857600 sectors
+   Disk /dev/loop0: 30 GiB, 32212254720 bytes, 62914560 sectors
    Units: sectors of 1 * 512 = 512 bytes
    Sector size (logical/physical): 512 bytes / 512 bytes
    I/O size (minimum/optimal): 512 bytes / 512 bytes
    Disklabel type: dos
-   Disk identifier: 0xeda12fcf
+   Disk identifier: 0xf4e11bd3
 
-   Device       Boot   Start       End   Sectors  Size Id Type
-   /dev/loop0p1 *       2048   1050623   1048576  512M 83 Linux
-   /dev/loop0p2      1050624 104857599 103806976 49.5G 83 Linux
+   Device       Boot   Start      End  Sectors  Size Id Type
+   /dev/loop0p1 *       2048  1050623  1048576  512M 83 Linux
+   /dev/loop0p2      1050624 62914559 61863936 29.5G 83 Linux
    ```
 
 ## Format partitions loop device
@@ -108,9 +108,9 @@ mkdir $HOME/cloud-image-ubuntu-from-scratch
       mke2fs 1.44.5 (15-Dec-2018)
       Discarding device blocks: done
       Creating filesystem with 131072 4k blocks and 32768 inodes
-      Filesystem UUID: c7704357-5ec0-46cb-8ca7-7ee721c005e5
+      Filesystem UUID: 4d426158-5c62-4b8c-8dcb-52c47e83df3e
       Superblock backups stored on blocks:
-              32768, 98304
+            32768, 98304
 
       Allocating group tables: done
       Writing inode tables: done
@@ -129,15 +129,15 @@ mkdir $HOME/cloud-image-ubuntu-from-scratch
       ```text
       mke2fs 1.44.5 (15-Dec-2018)
       Discarding device blocks: done
-      Creating filesystem with 12975872 4k blocks and 3244032 inodes
-      Filesystem UUID: 26efc7af-3cf7-4e92-9a31-bb0b373a297f
+      Creating filesystem with 7732992 4k blocks and 1933312 inodes
+      Filesystem UUID: 88086414-602f-4099-a112-c94a1c6a13f5
       Superblock backups stored on blocks:
-              32768, 98304, 163840, 229376, 294912, 819200, 884736, 1605632, 2654208,
-              4096000, 7962624, 11239424
+            32768, 98304, 163840, 229376, 294912, 819200, 884736, 1605632, 2654208,
+            4096000
 
       Allocating group tables: done
       Writing inode tables: done
-      Creating journal (65536 blocks): done
+      Creating journal (32768 blocks): done
       Writing superblocks and filesystem accounting information: done
       ```
 
