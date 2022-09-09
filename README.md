@@ -448,13 +448,13 @@ If you plan to use this image in **VirtualBox**, install **VirtualBox Guest Addi
    1. Download VirtualBox Guest Additions
 
        ```shell
-       curl --progress-bar https://download.virtualbox.org/virtualbox/6.0.6/VBoxGuestAdditions_6.0.6.iso -o VBoxGuestAdditions_6.0.6.iso
+       curl --progress-bar https://download.virtualbox.org/virtualbox/6.1.38/VBoxGuestAdditions_6.1.38.iso -o VBoxGuestAdditions_6.1.38.iso
        ```
 
    2. Mount ISO
 
        ```shell
-       mount -o loop VBoxGuestAdditions_6.0.6.iso /mnt
+       mount -o loop VBoxGuestAdditions_6.1.38.iso /mnt
        ```
 
    3. Install
@@ -467,7 +467,7 @@ If you plan to use this image in **VirtualBox**, install **VirtualBox Guest Addi
 
        ```text
        Verifying archive integrity... All good.
-       Uncompressing VirtualBox 6.0.6 Guest Additions for Linux........
+       Uncompressing VirtualBox 6.1.38 Guest Additions for Linux........
        VirtualBox Guest Additions installer
        Copying additional installer modules ...
        Installing additional modules ...
@@ -522,7 +522,7 @@ If you plan to use this image in **VirtualBox**, install **VirtualBox Guest Addi
        ```shell
        umount /mnt
 
-       rm -rf VBoxGuestAdditions_6.0.6.iso
+       rm -rf VBoxGuestAdditions_6.1.38.iso
        ```
 
    6. Fix `vboxadd-service`
