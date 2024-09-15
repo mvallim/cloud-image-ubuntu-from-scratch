@@ -62,40 +62,47 @@ mkdir $HOME/cloud-image-ubuntu-from-scratch
 4. Start loop device
 
    ```shell
-   sudo losetup -fP cloud-ubuntu-image.raw
+   sudo losetup --show -fP cloud-ubuntu-image.raw
+   ```
+   
+   A similar output to this
+
+   ```text
+   /dev/loop18
    ```
 
    Check loop device
 
    ```shell
-   sudo losetup -a
+   sudo losetup -l /dev/loop18
    ```
 
-   Output
+   A similar output to this
 
    ```text
-   /dev/loop0: [64775]:24650558 (/home/mvallim/cloud-image-ubuntu-from-scratch/cloud-ubuntu-image.raw)
+   NAME        SIZELIMIT OFFSET AUTOCLEAR RO BACK-FILE                                                            DIO LOG-SEC
+   /dev/loop18         0      0         0  0 /home/scratch/cloud-image-ubuntu-from-scratch/cloud-ubuntu-image.raw   0     512
    ```
 
 5. Check partitions on loop device
 
    ```shell
-   sudo fdisk -l /dev/loop0
+   sudo fdisk -l /dev/loop18
    ```
 
-   Output
+   A similar output to this
 
    ```text
-   Disk /dev/loop0: 30 GiB, 32212254720 bytes, 62914560 sectors
+   Disk /dev/loop18: 30 GiB, 32212254720 bytes, 62914560 sectors
    Units: sectors of 1 * 512 = 512 bytes
    Sector size (logical/physical): 512 bytes / 512 bytes
    I/O size (minimum/optimal): 512 bytes / 512 bytes
    Disklabel type: dos
-   Disk identifier: 0xf4e11bd3
+   Disk identifier: 0x64e50bc1
 
-   Device       Boot   Start      End  Sectors  Size Id Type
-   /dev/loop0p1 *       2048  1050623  1048576  512M 83 Linux
-   /dev/loop0p2      1050624 62914559 61863936 29.5G 83 Linux
+   Device        Boot   Start      End  Sectors  Size Id Type
+   /dev/loop18p1 *       2048  1050623  1048576  512M 83 Linux
+   /dev/loop18p2      1050624 62914559 61863936 29.5G 83 Linux
    ```
 
 ## Format partitions loop device
@@ -103,21 +110,21 @@ mkdir $HOME/cloud-image-ubuntu-from-scratch
    1. Format device loop0p1 (/boot)
 
       ```shell
-      sudo mkfs.ext4 /dev/loop0p1
+      sudo mkfs.ext4 /dev/loop18p1
       ```
 
-      Output
+      A similar output to this
 
       ```text
-      mke2fs 1.44.5 (15-Dec-2018)
-      Discarding device blocks: done
+      mke2fs 1.47.0 (5-Feb-2023)
+      Discarding device blocks: done                            
       Creating filesystem with 131072 4k blocks and 32768 inodes
-      Filesystem UUID: 4d426158-5c62-4b8c-8dcb-52c47e83df3e
-      Superblock backups stored on blocks:
-            32768, 98304
-
-      Allocating group tables: done
-      Writing inode tables: done
+      Filesystem UUID: 08b9e410-eb6d-4ba7-8a83-c3c960bca98c
+      Superblock backups stored on blocks: 
+      	32768, 98304
+      
+      Allocating group tables: done                            
+      Writing inode tables: done                            
       Creating journal (4096 blocks): done
       Writing superblocks and filesystem accounting information: done
       ```
@@ -125,24 +132,24 @@ mkdir $HOME/cloud-image-ubuntu-from-scratch
    2. Format device loop0p2 (/)
 
       ```shell
-      sudo mkfs.ext4 /dev/loop0p2
+      sudo mkfs.ext4 /dev/loop18p2
       ```
 
-      Output
+      A similar output to this
 
       ```text
-      mke2fs 1.44.5 (15-Dec-2018)
-      Discarding device blocks: done
+      mke2fs 1.47.0 (5-Feb-2023)
+      Discarding device blocks: done                            
       Creating filesystem with 7732992 4k blocks and 1933312 inodes
-      Filesystem UUID: 88086414-602f-4099-a112-c94a1c6a13f5
-      Superblock backups stored on blocks:
-            32768, 98304, 163840, 229376, 294912, 819200, 884736, 1605632, 2654208,
-            4096000
-
-      Allocating group tables: done
-      Writing inode tables: done
+      Filesystem UUID: 1c8f95b7-ea0f-4b62-a6ca-2da0c42209e2
+      Superblock backups stored on blocks: 
+      	32768, 98304, 163840, 229376, 294912, 819200, 884736, 1605632, 2654208, 
+      	4096000
+      
+      Allocating group tables: done                            
+      Writing inode tables: done                            
       Creating journal (32768 blocks): done
-      Writing superblocks and filesystem accounting information: done
+      Writing superblocks and filesystem accounting information: done   
       ```
 
 ## Mount loop devices
@@ -162,7 +169,7 @@ mkdir $HOME/cloud-image-ubuntu-from-scratch
 3. Mount `root` partition
 
    ```shell
-   sudo mount /dev/loop0p2 chroot/
+   sudo mount /dev/loop18p2 chroot/
    ```
 
 4. Mount `boot` partition
@@ -176,7 +183,7 @@ mkdir $HOME/cloud-image-ubuntu-from-scratch
    ... and mount `boot` partition
 
    ```shell
-   sudo mount /dev/loop0p1 chroot/boot
+   sudo mount /dev/loop18p1 chroot/boot
    ```
 
 ## Bootstrap and Configure Ubuntu
@@ -310,7 +317,6 @@ mkdir $HOME/cloud-image-ubuntu-from-scratch
        os-prober \
        ifupdown \
        network-manager \
-       resolvconf \
        locales \
        build-essential \
        module-assistant \
@@ -370,34 +376,15 @@ mkdir $HOME/cloud-image-ubuntu-from-scratch
             <img src="images/locales-default.png">
           </p>   
 
-    2. Reconfigure resolvconf
-
-       ```shell
-       dpkg-reconfigure resolvconf
-       ```
-
-       1. *Confirm changes*
-          <p align="center">
-            <img src="images/resolvconf-confirm-01.png">
-          </p>
-
-          <p align="center">
-            <img src="images/resolvconf-confirm-02.png">
-          </p>
-
-          <p align="center">
-            <img src="images/resolvconf-confirm-03.png">
-          </p>
-
-    3. Configure network-manager
+    2. Configure network-manager
 
        ```shell
        cat <<EOF > /etc/NetworkManager/NetworkManager.conf
        [main]
-       rc-manager=resolvconf
+       rc-manager=none
        plugins=ifupdown,keyfile
-       dns=default
-
+       dns=systemd-resolved
+      
        [ifupdown]
        managed=false
        EOF
@@ -417,7 +404,7 @@ mkdir $HOME/cloud-image-ubuntu-from-scratch
        grub-install /dev/loop0
        ```
 
-       Output
+       A similar output to this
 
        ```text
        Installing for i386-pc platform.
@@ -430,7 +417,7 @@ mkdir $HOME/cloud-image-ubuntu-from-scratch
        update-grub
        ```
 
-       Output
+       A similar output to this
 
        ```text
        Sourcing file `/etc/default/grub'
@@ -439,6 +426,12 @@ mkdir $HOME/cloud-image-ubuntu-from-scratch
        Found initrd image: /boot/initrd.img-4.15.0-74-generic
        Adding boot menu entry for EFI firmware configuration
        done
+       ```
+       
+    2. Update packages
+
+       ```shell
+       apt-get -y upgrade
        ```
 
 ## VirtualBox
@@ -460,7 +453,7 @@ If you plan to use this image in **VirtualBox**, install **VirtualBox Guest Addi
    3. Install
 
        ```shell
-       /mnt/VBoxLinuxAdditions.run
+       /mnt/VBoxLinuxAdditions.run --nox11
        ```
 
        Output like this
